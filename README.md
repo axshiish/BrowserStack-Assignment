@@ -1,7 +1,7 @@
 # BrowserStack Assignment
 
 ## Overview
-This project uses Selenium and BrowserStack to scrape and translate articles from El País and run tests across multiple browsers.
+This project demonstrates web scraping, translation, and cross-browser testing using Selenium and BrowserStack. It scrapes articles from the Opinion section of the Spanish news outlet El País, translates the titles to English, and analyzes repeated words across them.
 
 ## Setup Instructions
 1. Clone the repository.
