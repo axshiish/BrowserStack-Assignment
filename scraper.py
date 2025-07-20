@@ -7,15 +7,12 @@ import time
 import os
 import requests
 
-# Setup Chrome WebDriver
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-# Open El País
 driver.get("https://elpais.com/")
 time.sleep(5)
 
-# Accept cookies
 try:
     accept_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Aceptar')]")
     accept_button.click()
@@ -23,7 +20,6 @@ try:
 except:
     print("No cookie popup found.")
 
-# Go to Opinion section
 try:
     opinion_link = driver.find_element(By.XPATH, "//a[contains(@href, '/opinion/')]")
     opinion_link.click()
@@ -31,13 +27,10 @@ try:
 except:
     print("Opinion section not found.")
 
-# Get first 5 articles
 articles = driver.find_elements(By.CSS_SELECTOR, "article h2 a")[:5]
 
-# Create image folder
 os.makedirs("images", exist_ok=True)
 
-# Store titles for translation
 spanish_titles = []
 
 print("\n📰 First 5 Opinion Articles with Content and Images:\n")
@@ -45,7 +38,7 @@ print("\n📰 First 5 Opinion Articles with Content and Images:\n")
 for i, article in enumerate(articles, 1):
     article_url = article.get_attribute("href")
 
-    # Open in new tab
+    
     driver.execute_script("window.open(arguments[0]);", article_url)
     driver.switch_to.window(driver.window_handles[1])
     time.sleep(5)
@@ -82,7 +75,6 @@ for i, article in enumerate(articles, 1):
 
 driver.quit()
 
-# Translate titles
 print("\n🌐 Translated Titles:\n")
 translator = Translator()
 for i, title in enumerate(spanish_titles, 1):
