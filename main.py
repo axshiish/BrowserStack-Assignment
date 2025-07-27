@@ -6,6 +6,7 @@ from googletrans import Translator
 import time
 import os
 import requests
+import re
 
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
@@ -38,7 +39,6 @@ print("\n📰 First 5 Opinion Articles with Content and Images:\n")
 for i, article in enumerate(articles, 1):
     article_url = article.get_attribute("href")
 
-    
     driver.execute_script("window.open(arguments[0]);", article_url)
     driver.switch_to.window(driver.window_handles[1])
     time.sleep(5)
@@ -75,8 +75,28 @@ for i, article in enumerate(articles, 1):
 
 driver.quit()
 
+# 🌐 Translate Titles with Error Handling
 print("\n🌐 Translated Titles:\n")
 translator = Translator()
+translated_titles = []
+
 for i, title in enumerate(spanish_titles, 1):
-    translated = translator.translate(title, src='es', dest='en')
-    print(f"{i}. {translated.text}")
+    try:
+        translated = translator.translate(title, src='es', dest='en')
+        print(f"{i}. {translated.text}")
+        translated_titles.append(translated.text)
+    except Exception as e:
+        print(f"{i}. Translation failed: {e}")
+        translated_titles.append(title)  # fallback to original
+
+# 🔁 Count Repeated Words
+word_count = {}
+for title in translated_titles:
+    words = re.findall(r'\b\w+\b', title.lower())
+    for word in words:
+        word_count[word] = word_count.get(word, 0) + 1
+
+print("\n🔁 Repeated Words in Translated Titles (appearing more than twice):\n")
+for word, count in word_count.items():
+    if count > 2:
+        print(f"{word}: {count}")
