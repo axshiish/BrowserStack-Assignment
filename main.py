@@ -75,8 +75,8 @@ for i, article in enumerate(articles, 1):
 
 driver.quit()
 
-# 🌐 Translate Titles with Error Handling
-print("\n🌐 Translated Titles:\n")
+
+print("\n Translated Titles:\n")
 translator = Translator()
 translated_titles = []
 
@@ -87,16 +87,16 @@ for i, title in enumerate(spanish_titles, 1):
         translated_titles.append(translated.text)
     except Exception as e:
         print(f"{i}. Translation failed: {e}")
-        translated_titles.append(title)  # fallback to original
+        translated_titles.append(title)  
 
-# 🔁 Count Repeated Words
+
 word_count = {}
 for title in translated_titles:
     words = re.findall(r'\b\w+\b', title.lower())
     for word in words:
         word_count[word] = word_count.get(word, 0) + 1
 
-print("\n🔁 Repeated Words in Translated Titles (appearing more than twice):\n")
+print("\n Repeated Words in Translated Titles (appearing more than twice):\n")
 for word, count in word_count.items():
     if count > 2:
         print(f"{word}: {count}")
